@@ -1332,3 +1332,184 @@ function App() {
       </div>
     );
   };
+  const renderTemplates = () => (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 mb-6">Project Templates</h1>
+        <p className="text-xl text-gray-600 max-w-4xl">Kickstart your development with production-ready templates and boilerplates</p>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-8">
+        {projectTemplates.map((template) => (
+          <div key={template.id} className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-bold text-gray-900">{template.name}</h3>
+                <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                  template.difficulty === 'Beginner' ? 'bg-green-100 text-green-800' :
+                  template.difficulty === 'Intermediate' ? 'bg-yellow-100 text-yellow-800' :
+                  'bg-red-100 text-red-800'
+                }`}>
+                  {template.difficulty}
+                </div>
+              </div>
+              <p className="text-gray-600 mb-6 leading-relaxed">{template.description}</p>
+              
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-900 mb-3">Tech Stack</h4>
+                <div className="flex flex-wrap gap-2">
+                  {template.tech.map((tech, index) => (
+                    <span key={index} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-900 mb-3">Features</h4>
+                <ul className="space-y-2">
+                  {template.features.map((feature, index) => (
+                    <li key={index} className="flex items-center text-gray-600">
+                      <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="flex items-center text-sm text-gray-500 mb-6">
+                <Clock className="w-4 h-4 mr-2" />
+                <span>Estimated time: {template.estimatedTime}</span>
+              </div>
+
+              <div className="flex space-x-3">
+                {template.demoUrl && (
+                  <a
+                    href={template.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    <span>Live Demo</span>
+                  </a>
+                )}
+                {template.githubUrl && (
+                  <a
+                    href={template.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 bg-gray-800 text-white py-3 rounded-xl font-semibold hover:bg-gray-700 transition-all duration-300 flex items-center justify-center space-x-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Get Template</span>
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const renderRoadmap = () => (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 mb-6">Learning Roadmaps</h1>
+        <p className="text-xl text-gray-600 max-w-4xl">Structured learning paths to guide your development journey from beginner to expert</p>
+      </div>
+
+      <div className="space-y-12">
+        {learningPaths.map((path, pathIndex) => (
+          <div key={pathIndex} className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8">
+              <div className="flex items-center space-x-4">
+                <div className="bg-white/20 p-3 rounded-xl">
+                  {path.icon}
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold mb-2">{path.title}</h2>
+                  <div className="flex items-center space-x-6 text-blue-100">
+                    <div className="flex items-center">
+                      <Clock className="w-5 h-5 mr-2" />
+                      <span>{path.duration}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Award className="w-5 h-5 mr-2" />
+                      <span>{path.projects} Projects</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="p-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-6">Skills You'll Learn</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                {path.skills.map((skill, skillIndex) => (
+                  <div key={skillIndex} className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
+                    <div className="bg-gradient-to-br from-blue-500 to-purple-600 w-3 h-3 rounded-full"></div>
+                    <span className="font-medium text-gray-800">{skill}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8 flex space-x-4">
+                <button 
+                  onClick={() => {
+                    // Redirect to tutorials section
+                    setActiveSection('tutorials');
+                    // Clear filters to show all tutorials
+                    setSearchQuery('');
+                    setSelectedDifficulty('all');
+                    setSelectedCategory('all');
+                    // Scroll to tutorials section smoothly
+                    setTimeout(() => {
+                      const tutorialsSection = document.querySelector('[data-tutorials-section]');
+                      if (tutorialsSection) {
+                        tutorialsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }, 100);
+                  }}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center space-x-2"
+                >
+                  <Rocket className="w-5 h-5" />
+                  <span>Start Learning Path</span>
+                </button>
+                <button 
+                  onClick={() => {
+                    // Redirect to tutorials section with curriculum view
+                    setActiveSection('tutorials');
+                    // Filter by relevant category based on path
+                    if (path.title.includes('Frontend')) {
+                      setSelectedCategory('Frontend');
+                    } else if (path.title.includes('Backend')) {
+                      setSelectedCategory('Backend');
+                    } else if (path.title.includes('Full Stack')) {
+                      // Full Stack shows all categories
+                      setSelectedCategory('all');
+                    } else {
+                      setSelectedCategory('all');
+                    }
+                    setSearchQuery('');
+                    setSelectedDifficulty('all');
+                    // Scroll to tutorials section smoothly
+                    setTimeout(() => {
+                      const tutorialsSection = document.querySelector('[data-tutorials-section]');
+                      if (tutorialsSection) {
+                        tutorialsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }, 100);
+                  }}
+                  className="border border-gray-300 text-gray-700 px-8 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-all duration-300 flex items-center space-x-2"
+                >
+                  <BookOpen className="w-5 h-5" />
+                  <span>View Curriculum</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
