@@ -589,3 +589,281 @@ const aiResponses: { [key: string]: string } = {
   
   'default': '🤖 Hi! I\'m your AI Project Assistant. I can help you with:\n\n*Quick Examples:\n• "How to setup React with TypeScript?"\n• "Best database for my project?"\n• "Deploy to Vercel step by step"\n• "Design schema for e-commerce app"\n• "Node.js API best practices"\n• "Frontend performance optimization"\n\nI specialize in:\n✨ Frontend frameworks (React, Next.js, Vue)\n✨ Backend development (Node.js, Express, APIs)\n✨ Database design and setup\n✨ Deployment strategies\n✨ Performance optimization\n✨ Security best practices\n✨ Project architecture\n\nJust ask me anything about:*\n• Technology stack recommendations\n• Step-by-step setup guides\n• Best practices and patterns\n• Troubleshooting common issues\n• Tool and library suggestions\n\nWhat would you like to know about your project? 🚀'
 };
+const getAIResponse = (message: string): string => {
+  const lowerMessage = message.toLowerCase();
+  
+  // Check for specific project types
+  if (lowerMessage.includes('ecommerce') || lowerMessage.includes('e-commerce') || lowerMessage.includes('shop')) {
+    return aiResponses.ecommerce;
+  }
+  if (lowerMessage.includes('blog') || lowerMessage.includes('cms')) {
+    return aiResponses.blog;
+  }
+  if (lowerMessage.includes('api') && (lowerMessage.includes('rest') || lowerMessage.includes('graphql'))) {
+    return aiResponses.api;
+  }
+  
+  // Check for specific technologies
+  if (lowerMessage.includes('typescript') || lowerMessage.includes('ts')) {
+    return aiResponses.typescript;
+  }
+  if (lowerMessage.includes('vercel')) {
+    return aiResponses.vercel;
+  }
+  if (lowerMessage.includes('railway')) {
+    return aiResponses.railway;
+  }
+  if (lowerMessage.includes('postgresql') || lowerMessage.includes('postgres')) {
+    return aiResponses.postgresql;
+  }
+  if (lowerMessage.includes('mongodb') || lowerMessage.includes('mongo')) {
+    return aiResponses.mongodb;
+  }
+  if (lowerMessage.includes('express')) {
+    return aiResponses.express;
+  }
+  if (lowerMessage.includes('vue')) {
+    return aiResponses.vue;
+  }
+  
+  // Check for general topics
+  if (lowerMessage.includes('tools') || lowerMessage.includes('recommend')) {
+    return aiResponses.tools;
+  }
+  if (lowerMessage.includes('error') || lowerMessage.includes('debug') || lowerMessage.includes('fix')) {
+    return aiResponses.error;
+  }
+  if (lowerMessage.includes('performance') || lowerMessage.includes('optimize') || lowerMessage.includes('speed')) {
+    return aiResponses.performance;
+  }
+  if (lowerMessage.includes('security') || lowerMessage.includes('secure') || lowerMessage.includes('auth')) {
+    return aiResponses.security;
+  }
+  
+  // Original keyword matching
+  for (const [key, response] of Object.entries(aiResponses)) {
+    if (lowerMessage.includes(key)) {
+      return response;
+    }
+  }
+  
+  // Help keywords
+  if (lowerMessage.includes('how') || lowerMessage.includes('setup') || lowerMessage.includes('start')) {
+    return aiResponses.help;
+  }
+  
+  return aiResponses.default;
+};
+
+function App() {
+  const [activeSection, setActiveSection] = useState<string>('home');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      id: '1',
+      type: 'bot',
+      content: '🤖 Welcome to Project Guide AI! I\'m your intelligent project assistant.\n\nI can help you with:\n✨ Frontend development (React, Next.js, Vue)\n✨ Backend setup (Node.js, Express, APIs)\n✨ Database design and optimization\n✨ Schema planning and best practices\n✨ Deployment strategies (Vercel, Railway)\n✨ Performance optimization\n✨ Security best practices\n\n**Try asking me:**\n• "How to setup React with TypeScript?"\n• "Best database for e-commerce app?"\n• "Deploy Node.js app to Railway?"\n• "Design schema for blog application?"\n\nWhat would you like to build today? 🚀',
+      timestamp: new Date()
+    }
+  ]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<'all' | 'Beginner' | 'Intermediate' | 'Advanced'>('all');
+  const [selectedCategory, setSelectedCategory] = useState<'all' | 'Frontend' | 'Backend' | 'Database' | 'Deployment'>('all');
+
+  const sendMessage = () => {
+    if (!inputMessage.trim()) return;
+
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      type: 'user',
+      content: inputMessage,
+      timestamp: new Date()
+    };
+
+    const botResponse: ChatMessage = {
+      id: (Date.now() + 1).toString(),
+      type: 'bot',
+      content: getAIResponse(inputMessage),
+      timestamp: new Date()
+    };
+
+    setChatMessages(prev => [...prev, userMessage, botResponse]);
+    setInputMessage('');
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  const renderHome = () => (
+    <div className="space-y-20">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="text-center space-y-8">
+            <div className="flex items-center justify-center space-x-2 mb-6">
+              <Zap className="w-10 h-10 text-yellow-300" />
+              <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+                Project Guide AI
+              </h1>
+            </div>
+            <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed">
+              Your comprehensive guide to building modern web applications with AI-powered recommendations and best practices
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
+              <button 
+                onClick={() => setActiveSection('frontend')}
+                className="group bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2"
+              >
+                <span>Get Started</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button className="bg-blue-500/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-400/30 transition-all duration-300">
+                Watch Demo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Features Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 mb-6">Everything You Need to Build</h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            From concept to deployment, we guide you through every step of modern web development
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sections.map((section) => (
+            <div 
+              key={section.id}
+              className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-blue-200"
+              onClick={() => setActiveSection(section.id)}
+            >
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-3 rounded-xl text-white group-hover:scale-110 transition-transform">
+                  {section.icon}
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">{section.title}</h3>
+              </div>
+              <p className="text-gray-600 mb-6 leading-relaxed">{section.description}</p>
+              <div className="flex items-center text-blue-600 font-semibold group-hover:translate-x-2 transition-transform">
+                <span>Explore</span>
+                <ChevronRight className="w-5 h-5 ml-1" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Stats Section */}
+      <div className="bg-gray-50 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">50+</div>
+              <div className="text-gray-600">Recommended Tools</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-purple-600 mb-2">100%</div>
+              <div className="text-gray-600">AI-Powered</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-indigo-600 mb-2">24/7</div>
+              <div className="text-gray-600">Available</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-pink-600 mb-2">∞</div>
+              <div className="text-gray-600">Projects Possible</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Testimonials Section */}
+      <div className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">What Developers Say</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Join thousands of developers who have accelerated their careers with Project Guide AI
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial) => (
+              <div key={testimonial.id} className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+                <div className="flex items-center mb-6">
+                  <div className="text-4xl mr-4">{testimonial.avatar}</div>
+                  <div>
+                    <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
+                    <p className="text-sm text-gray-600">{testimonial.role} at {testimonial.company}</p>
+                  </div>
+                </div>
+                <div className="flex mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                  ))}
+                </div>
+                <p className="text-gray-700 leading-relaxed">{testimonial.content}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Learning Paths Section */}
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Choose Your Learning Path</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Structured roadmaps to guide your development journey from beginner to expert
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {learningPaths.map((path, index) => (
+              <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-4 rounded-xl text-white w-fit mb-6">
+                  {path.icon}
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">{path.title}</h3>
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center text-gray-600">
+                    <Clock className="w-5 h-5 mr-2" />
+                    <span>{path.duration}</span>
+                  </div>
+                  <div className="flex items-center text-gray-600">
+                    <Award className="w-5 h-5 mr-2" />
+                    <span>{path.projects} Projects</span>
+                  </div>
+                </div>
+                <div className="space-y-2 mb-6">
+                  {path.skills.map((skill, skillIndex) => (
+                    <div key={skillIndex} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700 inline-block mr-2 mb-2">
+                      {skill}
+                    </div>
+                  ))}
+                </div>
+                <button 
+                  onClick={() => setActiveSection('roadmap')}
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300"
+                >
+                  Start Learning Path
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
