@@ -867,3 +867,468 @@ function App() {
       </div>
     </div>
   );
+  const renderToolSection = (title: string, tools: Tool[], description: string, steps: string[]) => (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 mb-6">{title}</h1>
+        <p className="text-xl text-gray-600 max-w-4xl">{description}</p>
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-12">
+        {/* Recommended Tools */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
+            <Sparkles className="w-6 h-6 text-yellow-500 mr-3" />
+            AI Recommended Tools
+          </h2>
+          <div className="space-y-4">
+            {tools.map((tool, index) => (
+              <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 group">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start space-x-4">
+                    <div className="text-3xl">{tool.logo}</div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900 mb-1">{tool.name}</h3>
+                      <p className="text-sm text-blue-600 font-semibold mb-2">{tool.category}</p>
+                      <p className="text-gray-600 leading-relaxed">{tool.description}</p>
+                    </div>
+                  </div>
+                  <a 
+                    href={tool.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <ExternalLink className="w-5 h-5" />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Setup Steps */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
+            <CheckCircle className="w-6 h-6 text-green-500 mr-3" />
+            Setup Guide
+          </h2>
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8">
+            <div className="space-y-6">
+              {steps.map((step, index) => (
+                <div key={index} className="flex items-start space-x-4">
+                  <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-semibold text-sm flex-shrink-0">
+                    {index + 1}
+                  </div>
+                  <p className="text-gray-700 leading-relaxed">{step}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'frontend':
+        return renderToolSection(
+          'Frontend Development',
+          frontendTools,
+          'Build stunning user interfaces with modern frameworks, styling solutions, and development tools that enhance productivity and user experience.',
+          [
+            'Choose your framework (React, Next.js, or Vue.js) based on project requirements',
+            'Set up your development environment with Vite for fast hot reloading',
+            'Install Tailwind CSS for rapid styling and responsive design',
+            'Add TypeScript for better code quality and developer experience',
+            'Configure ESLint and Prettier for consistent code formatting',
+            'Set up component library and design system for scalable UI development'
+          ]
+        );
+      
+      case 'backend':
+        return renderToolSection(
+          'Backend Development',
+          backendTools,
+          'Create robust server-side applications with modern frameworks, databases, and API solutions that scale with your needs.',
+          [
+            'Initialize Node.js project with Express.js or Fastify framework',
+            'Set up TypeScript configuration for type-safe backend development',
+            'Configure database connection using Prisma ORM or similar tools',
+            'Implement authentication and authorization middleware',
+            'Create RESTful APIs or GraphQL endpoints for data access',
+            'Add logging, error handling, and security best practices'
+          ]
+        );
+      
+      case 'database':
+        return renderToolSection(
+          'Database Setup',
+          databaseTools,
+          'Design and implement efficient database solutions that provide fast, reliable data storage and retrieval for your applications.',
+          [
+            'Choose between SQL (PostgreSQL) or NoSQL (MongoDB) based on data structure',
+            'Design database schema with proper relationships and constraints',
+            'Set up database hosting on cloud platforms like Supabase or PlanetScale',
+            'Configure connection pooling and optimization settings',
+            'Implement data validation and migration scripts',
+            'Add caching layer with Redis for improved performance'
+          ]
+        );
+      
+      case 'schema':
+        return renderToolSection(
+          'Schema Design',
+          [
+            { name: 'Prisma Studio', description: 'Visual database browser and admin interface', category: 'Database Tool', url: 'https://prisma.io/studio', logo: '🔍' },
+            { name: 'dbdiagram.io', description: 'Database relationship diagrams made simple', category: 'Design Tool', url: 'https://dbdiagram.io', logo: '📊' },
+            { name: 'Lucidchart', description: 'Intelligent diagramming application', category: 'Diagram Tool', url: 'https://lucidchart.com', logo: '📋' },
+            { name: 'ERD Plus', description: 'Entity relationship diagram tool', category: 'ERD Tool', url: 'https://erdplus.com', logo: '🗺' }
+          ],
+          'Plan and structure your data models with proper relationships, constraints, and optimization for optimal database performance.',
+          [
+            'Identify entities and their attributes based on business requirements',
+            'Define relationships between entities (one-to-one, one-to-many, many-to-many)',
+            'Create entity-relationship diagrams using visual tools',
+            'Normalize database design to reduce redundancy and improve integrity',
+            'Define primary keys, foreign keys, and appropriate indexes',
+            'Validate schema design with real-world data scenarios'
+          ]
+        );
+      
+      case 'deployment':
+        return renderToolSection(
+          'Deployment & Hosting',
+          deploymentTools,
+          'Deploy your applications to production with confidence using modern hosting platforms and deployment strategies.',
+          [
+            'Build your application for production with optimized assets',
+            'Choose hosting platform: Vercel for frontend, Railway for full-stack',
+            'Configure environment variables and secrets management',
+            'Set up custom domain and SSL certificates',
+            'Implement CI/CD pipeline for automated deployments',
+            'Monitor application performance and set up error tracking'
+          ]
+        );
+      case 'tutorials':
+        return renderTutorials();
+      case 'templates':
+        return renderTemplates();
+      case 'roadmap':
+        return renderRoadmap();
+      case 'resources':
+        return renderResources();
+      case 'best-practices':
+        return renderBestPractices();
+      case 'tools':
+        return renderTools();
+      
+      default:
+        return renderHome();
+    }
+  };
+
+  const renderTutorials = () => {
+    const filteredTutorials = tutorials.filter(tutorial => {
+      const matchesSearch = tutorial.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           tutorial.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           tutorial.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      const matchesDifficulty = selectedDifficulty === 'all' || tutorial.difficulty === selectedDifficulty;
+      const matchesCategory = selectedCategory === 'all' || tutorial.category === selectedCategory;
+      return matchesSearch && matchesDifficulty && matchesCategory;
+    });
+
+    // Group tutorials by category for category banners
+    const tutorialsByCategory = filteredTutorials.reduce((acc, tutorial) => {
+      if (!acc[tutorial.category]) {
+        acc[tutorial.category] = [];
+      }
+      acc[tutorial.category].push(tutorial);
+      return acc;
+    }, {} as Record<string, Tutorial[]>);
+
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Featured Tutorial Banner */}
+        <div className="mb-8 bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 rounded-2xl p-6 shadow-lg">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center space-x-4">
+              <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+                <Rocket className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-1">Featured Tutorial</h2>
+                <p className="text-blue-100">Deploy Full-Stack Apps to Production</p>
+              </div>
+            </div>
+            <a
+              href="https://youtu.be/cVEOhgPziO8?si=qZ4oBwgsICJVv0af"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-blue-50 transition-all duration-300 flex items-center space-x-2 shadow-lg"
+            >
+              <Play className="w-5 h-5" />
+              <span>Watch Now</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+
+        {/* New Tutorials Banner */}
+        <div className="mb-8 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-600 rounded-2xl p-6 shadow-lg">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center space-x-4">
+              <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+                <Sparkles className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <div className="flex items-center space-x-2 mb-1">
+                  <span className="bg-white/30 px-2 py-1 rounded text-xs font-bold">NEW</span>
+                  <h2 className="text-2xl font-bold text-white">Latest Tutorials Added</h2>
+                </div>
+                <p className="text-green-100">Fresh content updated weekly - Stay ahead with the latest technologies</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedDifficulty('all');
+                setSelectedCategory('all');
+                // Scroll to tutorials section smoothly
+                setTimeout(() => {
+                  const tutorialsSection = document.querySelector('[data-tutorials-section]');
+                  if (tutorialsSection) {
+                    tutorialsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }, 100);
+              }}
+              className="bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-green-50 transition-all duration-300 flex items-center space-x-2 shadow-lg"
+            >
+              <BookOpen className="w-5 h-5" />
+              <span>Explore All</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Popular Tutorials Banner */}
+        <div className="mb-8 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 rounded-2xl p-6 shadow-lg">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center space-x-4">
+              <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+                <Star className="w-8 h-8 text-white fill-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-1">Most Popular Tutorials</h2>
+                <p className="text-purple-100">Join 15,000+ developers learning these trending topics</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl">
+                <Users className="w-5 h-5 text-white mr-2" />
+                <span className="text-white font-semibold">15K+ Views</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-12" data-tutorials-section>
+          <h1 className="text-4xl font-bold text-gray-900 mb-6">Video Tutorials</h1>
+          <p className="text-xl text-gray-600 max-w-4xl">Learn with comprehensive video guides covering every aspect of modern web development</p>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-8">
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="relative">
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search tutorials..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <div className="relative">
+              <Filter className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <select
+                value={selectedDifficulty}
+                onChange={(e) => setSelectedDifficulty(e.target.value as 'all' | 'Beginner' | 'Intermediate' | 'Advanced')}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+              >
+                <option value="all">All Levels</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+              <ChevronDown className="w-5 h-5 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            </div>
+            <div className="relative">
+              <Filter className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value as 'all' | 'Frontend' | 'Backend' | 'Database' | 'Deployment')}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+              >
+                <option value="all">All Categories</option>
+                <option value="Frontend">Frontend</option>
+                <option value="Backend">Backend</option>
+                <option value="Database">Database</option>
+                <option value="Deployment">Deployment</option>
+              </select>
+              <ChevronDown className="w-5 h-5 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            </div>
+          </div>
+        </div>
+
+        {/* Category Banners */}
+        {Object.keys(tutorialsByCategory).length > 0 && (
+          <div className="mb-8 space-y-4">
+            {Object.entries(tutorialsByCategory).map(([category, categoryTutorials]) => (
+              <div 
+                key={category}
+                className={`rounded-xl p-4 shadow-md border-l-4 ${
+                  category === 'Frontend' ? 'bg-blue-50 border-blue-500' :
+                  category === 'Backend' ? 'bg-green-50 border-green-500' :
+                  category === 'Database' ? 'bg-purple-50 border-purple-500' :
+                  'bg-orange-50 border-orange-500'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className={`p-2 rounded-lg ${
+                      category === 'Frontend' ? 'bg-blue-100' :
+                      category === 'Backend' ? 'bg-green-100' :
+                      category === 'Database' ? 'bg-purple-100' :
+                      'bg-orange-100'
+                    }`}>
+                      {category === 'Frontend' ? <Code className="w-5 h-5 text-blue-600" /> :
+                       category === 'Backend' ? <Server className="w-5 h-5 text-green-600" /> :
+                       category === 'Database' ? <Database className="w-5 h-5 text-purple-600" /> :
+                       <Rocket className="w-5 h-5 text-orange-600" />}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900">{category} Tutorials</h3>
+                      <p className="text-sm text-gray-600">{categoryTutorials.length} tutorial{categoryTutorials.length !== 1 ? 's' : ''} available</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Tutorials Grid */}
+        <div className="grid md:grid-cols-2 gap-8">
+          {filteredTutorials.map((tutorial) => (
+            <div key={tutorial.id} className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
+              {/* Tutorial Banner Header */}
+              <div className={`relative ${
+                tutorial.category === 'Frontend' ? 'bg-gradient-to-r from-blue-500 to-cyan-500' :
+                tutorial.category === 'Backend' ? 'bg-gradient-to-r from-green-500 to-emerald-500' :
+                tutorial.category === 'Database' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
+                'bg-gradient-to-r from-orange-500 to-red-500'
+              } p-4`}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-white text-sm font-semibold">
+                    {tutorial.category}
+                  </span>
+                  {tutorial.views > 10000 && (
+                    <span className="bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full text-xs font-bold flex items-center space-x-1">
+                      <Star className="w-3 h-3 fill-current" />
+                      <span>Popular</span>
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center space-x-3 text-white">
+                  <div className="flex items-center space-x-1">
+                    <Star className="w-4 h-4 fill-white" />
+                    <span className="text-sm font-semibold">{tutorial.rating}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <Users className="w-4 h-4" />
+                    <span className="text-sm">{tutorial.views.toLocaleString()} views</span>
+                  </div>
+                  <div className={`px-2 py-1 rounded text-xs font-semibold ${
+                    tutorial.difficulty === 'Beginner' ? 'bg-green-500/30' :
+                    tutorial.difficulty === 'Intermediate' ? 'bg-yellow-500/30' :
+                    'bg-red-500/30'
+                  }`}>
+                    {tutorial.difficulty}
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href={tutorial.url || '#'}
+                target={tutorial.url ? "_blank" : undefined}
+                rel={tutorial.url ? "noopener noreferrer" : undefined}
+                className="relative bg-gradient-to-br from-gray-800 to-gray-900 h-48 flex items-center justify-center block"
+              >
+                <Play className="w-16 h-16 text-white group-hover:scale-110 transition-transform cursor-pointer" />
+                <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-white text-sm font-semibold flex items-center space-x-1">
+                  <Clock className="w-4 h-4" />
+                  <span>{tutorial.duration}</span>
+                </div>
+              </a>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{tutorial.title}</h3>
+                <p className="text-gray-600 mb-4 leading-relaxed">{tutorial.description}</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {tutorial.tags.map((tag, index) => (
+                    <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded-md text-xs">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                {tutorial.url ? (
+                  <a
+                    href={tutorial.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2"
+                  >
+                    <Play className="w-5 h-5" />
+                    <span>Watch Tutorial</span>
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                ) : (
+                  <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2">
+                    <Play className="w-5 h-5" />
+                    <span>Watch Tutorial</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Call to Action Banner */}
+        <div className="mt-12 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 shadow-lg">
+          <div className="text-center text-white">
+            <h2 className="text-3xl font-bold mb-4">Ready to Start Learning?</h2>
+            <p className="text-xl text-indigo-100 mb-6 max-w-2xl mx-auto">
+              Join thousands of developers building amazing projects with our comprehensive tutorials
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button 
+                onClick={() => setActiveSection('roadmap')}
+                className="bg-white text-indigo-600 px-8 py-3 rounded-xl font-semibold hover:bg-indigo-50 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg"
+              >
+                <BookOpen className="w-5 h-5" />
+                <span>View Learning Paths</span>
+              </button>
+              <button 
+                onClick={() => setIsChatOpen(true)}
+                className="bg-indigo-500/20 backdrop-blur-sm border-2 border-white/30 text-white px-8 py-3 rounded-xl font-semibold hover:bg-indigo-500/30 transition-all duration-300 flex items-center justify-center space-x-2"
+              >
+                <MessageCircle className="w-5 h-5" />
+                <span>Ask AI Assistant</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
