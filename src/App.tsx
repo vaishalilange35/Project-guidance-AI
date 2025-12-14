@@ -1513,3 +1513,56 @@ function App() {
       </div>
     </div>
   );
+  const renderResources = () => ( 
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 mb-6">Learning Resources</h1>
+        <p className="text-xl text-gray-600 max-w-4xl">Essential documentation, communities, and tools to accelerate your development journey</p>
+      </div>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {resources.map((resource, index) => (
+          <a
+            key={index}
+            href={resource.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 group"
+          >
+            <div className="flex items-start space-x-4 mb-4">
+              <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-3 rounded-xl text-white group-hover:scale-110 transition-transform">
+                {resource.icon}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-lg font-bold text-gray-900">{resource.name}</h3>
+                  <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                </div>
+                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-semibold">
+                  {resource.category}
+                </span>
+              </div>
+            </div>
+            <p className="text-gray-600 leading-relaxed">{resource.description}</p>
+          </a>
+        ))}
+      </div>
+
+      {/* Additional Resources Banner */}
+      <div className="mt-12 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 shadow-lg">
+        <div className="text-center text-white">
+          <h2 className="text-3xl font-bold mb-4">Need More Resources?</h2>
+          <p className="text-xl text-indigo-100 mb-6 max-w-2xl mx-auto">
+            Ask our AI assistant for specific documentation, tutorials, or community recommendations
+          </p>
+          <button 
+            onClick={() => setIsChatOpen(true)}
+            className="bg-white text-indigo-600 px-8 py-3 rounded-xl font-semibold hover:bg-indigo-50 transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg mx-auto"
+          >
+            <MessageCircle className="w-5 h-5" />
+            <span>Ask AI Assistant</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
